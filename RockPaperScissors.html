@@ -4,6 +4,67 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rock Paper Scissors Game</title>
+    <style>
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      li {
+        display: inline-block;
+      }
+      .btn {
+        width: 150px;
+        padding: 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: peachpuff;
+        font-size: 20px;
+        cursor: pointer;
+      }
+    </style>
   </head>
-  <body></body>
+  <body>
+    <ul>
+      <li>
+        <button onclick="rspPlayer('가위')" class="btn">✌️ 가위</button>
+      </li>
+      <li>
+        <button onclick="rspPlayer('바위')" class="btn">✊ 바위</button>
+      </li>
+      <li>
+        <button onclick="rspPlayer('보')" class="btn">🖐️ 보</button>
+      </li>
+    </ul>
+    <script>
+      function getRandomInteger(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+      }
+
+      function rspPlayer(userRsp) {
+        const rsp = ["가위", "바위", "보"];
+        const computerRsp = rsp[getRandomInteger(0, 2)];
+
+        const winValue = {
+          가위: "보",
+          바위: "가위",
+          보: "바위",
+        };
+
+        console.log("사용자가 선택한 것", userRsp);
+        console.log("컴퓨터가 선택한 것", computerRsp);
+
+        const result =
+          userRsp === computerRsp
+            ? "무승부"
+            : winValue[userRsp] === computerRsp
+            ? "승리"
+            : "패배";
+
+        if (result === "무승부") alert("무승부입니다.");
+        if (result === "승리") alert("이겼습니다.");
+        if (result === "패배") alert("패배하셨습니다.");
+      }
+    </script>
+  </body>
 </html>
