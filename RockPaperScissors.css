@@ -1,17 +1,314 @@
+/* 웹폰트 설정 */
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&family=Oswald:wght@200;300;400;500;600;700&display=swap");
+/*
+font-family: 'Lato', sans-serif;
+Thin 100
+Light 300
+Regular 400
+Bold 700
+Black 900
+font-family: 'Oswald', sans-serif;
+Extra-light 200
+Light 300
+Regular 400
+Medium 500
+Semi-bold 600
+Bold 700
+*/
+
+/* Root */
+:root {
+  --dark-color: #1d1f24;
+  --dark-opacity4-color: rgb(29, 31, 36, 0.4);
+  --dark-opacity7-color: rgb(29, 31, 36, 0.7);
+  --light-color: #fff;
+  --light-gray-color: #f2f3f6;
+  --light-opacity2-color: rgba(255, 255, 255, 0.2);
+  --light-opacity3-color: rgba(255, 255, 255, 0.3);
+  --light-opacity7-color: rgb(255, 255, 255, 0.7);
+  --pink-btn-color: #e8d3ff;
+  --blue-btn-color: #deecff;
+  --dot-color: #ff565c;
+}
+
+/* reset */
+html {
+  font-size: 62.5%;
+}
+body {
+  margin: 0;
+  font-family: "Lato", sans-serif;
+  color: var(--dark-color);
+}
+button {
+  appearance: none;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+}
 ul {
   list-style: none;
-  margin: 0;
   padding: 0;
+  margin: 0;
 }
-li {
-  display: inline-block;
+a {
+  text-decoration: none;
+  color: inherit;
 }
-.btn {
-  width: 150px;
-  padding: 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: peachpuff;
-  font-size: 20px;
+a:hover,
+a:focus {
+  text-decoration: underline;
+}
+/* common */
+.hidden_txt {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  font-size: 0;
+  line-height: 0;
+  color: rgba(0, 0, 0, 0);
+}
+.a11y-hidden {
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+}
+
+/* layout */
+body {
+  background-color: #f9fafc;
+  margin-top: 7.1rem;
+  font-size: 1.4rem;
+}
+.container {
+  min-width: 32rem;
+}
+.header > .inner,
+.main > .inner,
+.footer > .inner {
+  margin: 0 auto;
+  display: flex;
+}
+.header > .inner {
+  height: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+.main > .inner {
+  padding: 3.4rem 4rem;
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2.9rem;
+}
+.main .wrap_computer,
+.main .wrap_user,
+.main .card.computer,
+.main .card.user {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.main .wrap_user .wrap_cards_user {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.4rem;
+}
+.header {
+  width: 100%;
+  height: 7rem;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  background-color: var(--light-color);
+  border-bottom: 1px solid #ebebeb;
+}
+.footer > .inner {
+  padding: 2.3rem 3.2rem 4.1rem 2.3rem;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.footer {
+  background-color: var(--dark-color);
+  color: var(--light-color);
+}
+
+/* header */
+.logo {
+  color: var(--dark-color);
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 3rem;
+  text-decoration: none;
+  display: block;
+  padding-right: 0.6rem;
+  margin-left: 2.3rem;
+  position: relative;
+}
+.logo::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0.8rem;
+  width: 0.4rem;
+  height: 0.4rem;
+  background-color: var(--dot-color);
+}
+.btn_open_menu {
+  width: 6.7rem;
+  height: 100%;
   cursor: pointer;
+  position: relative;
+}
+.btn_open_menu span,
+.btn_open_menu::before,
+.btn_open_menu::after {
+  content: "";
+  width: 2.7rem;
+  height: 0.2rem;
+  background-color: var(--dark-color);
+}
+.btn_open_menu span {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.btn_open_menu::before {
+  margin-top: -0.7rem;
+}
+.btn_open_menu::after {
+  margin-top: 0.7rem;
+}
+.btn_open_menu::before,
+.btn_open_menu::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  will-change: transform, margin-top;
+  transition-property: transform, margin-top;
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
+  transform: translate(-50%, -50%) rotateZ(0);
+}
+/* 버튼 끌 때 */
+.btn_open_menu.prev_close::before,
+.btn_open_menu.prev_close::after,
+.btn_open_menu.close::before,
+.btn_open_menu.close::after {
+  margin-top: 0;
+}
+.btn_open_menu.close span {
+  width: 0;
+}
+.btn_open_menu.close::before {
+  transform: translate(-50%, -50%) rotateZ(45deg);
+}
+.btn_open_menu.close::after {
+  transform: translate(-50%, -50%) rotateZ(-45deg);
+}
+.btn_open_menu.close.next_close::before,
+.btn_open_menu.close.next_close::after {
+  transform: translate(-50%, -50%) rotateZ(0);
+}
+.gnb {
+  position: absolute;
+  left: 0;
+  top: 7.1rem;
+  width: 100%;
+  height: 0;
+  overflow: hidden;
+  background-color: var(--light-color);
+  box-shadow: 0 0 0.5rem -0.5rem var(--dark-color);
+  will-change: height, box-shadow;
+  transition-property: height, box-shadow;
+  transition-duration: 300ms;
+  transition-timing-function: ease-out;
+}
+.gnb.open {
+  box-shadow: 0 0.5rem 0.5rem -0.5rem var(--dark-color);
+  height: 26.6rem;
+}
+.gnb li {
+  border-bottom: 0.1rem solid var(--light-gray-color);
+}
+.gnb a {
+  font-family: "Oswald", sans-serif;
+  height: 3.7rem;
+  padding: 0 2rem;
+  color: var(--dark-color);
+  font-weight: 500;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+}
+
+/* main */
+.wrap_computer {
+  gap: 1.9rem;
+}
+.wrap_computer > img,
+.wrap_user > img {
+  width: 5rem;
+  height: 5rem;
+}
+.wrap_user > img {
+  margin-top: 1.9rem;
+  margin-bottom: 3.4rem;
+}
+.card.computer {
+  width: 15rem;
+  height: 16rem;
+  background-color: var(--blue-btn-color);
+  border-radius: 1.4rem;
+}
+.card.computer img {
+  width: 7.7rem;
+}
+.card.user {
+  width: 8.9rem;
+  height: 9.3rem;
+  background-color: var(--pink-btn-color);
+  border-radius: 1.4rem;
+  cursor: pointer;
+}
+/* footer */
+.footer .property,
+.footer .sitemap {
+  display: flex;
+}
+.footer .property {
+  flex-direction: column;
+  gap: 1.3rem;
+}
+.footer .logo {
+  color: var(--light-color);
+  display: inline-flex;
+  margin: 0;
+}
+.footer .copyright {
+  color: var(--light-opacity7-color);
+}
+.footer .sitemap {
+  flex-wrap: wrap;
+}
+.footer .sitemap li {
+  width: 50%;
+  margin-bottom: 1.7rem;
+}
+.footer .sitemap li:last-child {
+  margin-bottom: 0;
+}
+.footer .sitemap a {
+  font-family: "Oswald", sans-serif;
+  text-transform: uppercase;
 }
