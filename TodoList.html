@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To Do List</title>
+    <link rel="stylesheet" href="./RockPaperScissors.css" />
+    <style>
+      :root {
+        --green-btn-color: #03ae85;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        background-color: #f9fafc;
+      }
+      .main {
+        min-width: 34.35rem;
+        padding: 0 1.6rem;
+        margin: 12rem 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+      }
+      .main .title {
+        font-size: 2rem;
+        font-weight: 900;
+      }
+      .inp_field {
+        min-width: 34.3rem;
+      }
+      .inp_field > input {
+        width: 29.3rem;
+        padding: 0.8rem 1rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 0.5rem 0 0 0.5rem;
+        box-shadow: 0 0.3rem 1rem rgb(29, 31, 36, 0.4);
+      }
+      .inp_field > button {
+        width: 5rem;
+        padding: 0.8rem 1.45rem;
+        background-color: var(--green-btn-color);
+        font-size: 1rem;
+        color: #fff;
+        border-radius: 0 0.5rem 0.5rem 0;
+        box-shadow: 0.4rem 0.3rem 1rem rgb(29, 31, 36, 0.4);
+        cursor: pointer;
+      }
+      .outp_field {
+        min-width: 34.3rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+      .outp_field .todo_status_wrap {
+        display: flex;
+        justify-content: space-between;
+      }
+      .outp_field .todo_status_wrap span {
+        display: inline-block;
+        min-width: 16.7rem;
+        padding: 0.5rem 0.8rem;
+        border: 0.1rem solid #d9d9d9;
+      }
+      .outp_field .todo_contents_list li {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.8rem;
+        background-color: #fff;
+        font-size: 1rem;
+      }
+      .outp_field .todo_contents_list .btns {
+        display: inline-flex;
+        gap: 0.5rem;
+        align-items: center;
+        justify-content: center;
+      }
+      .btns .btn {
+        width: 1.025rem;
+        height: 1rem;
+        background-image: url(./Asset/todo_sprites.png);
+        background-size: 400%;
+        color: transparent;
+        text-indent: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        cursor: pointer;
+      }
+      .btns .btn.delete {
+        background-position: -1.5px -1.5px;
+      }
+      .btns .btn.change {
+        background-position: -15.25px -1.5px;
+      }
+      .btns .btn.save {
+        background-position: -29px -1.5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header" id="header"></header>
+      <main class="main">
+        <h2 class="title">My To do List</h2>
+        <div class="inp_field">
+          <input type="text" placeholder="할일을 입력해 주세요." /><button>
+            Save
+          </button>
+        </div>
+        <div class="outp_field">
+          <div class="todo_status_wrap">
+            <span>Todo Done:</span>
+            <span>Todo Progress:</span>
+          </div>
+          <ul class="todo_contents_list">
+            <li>
+              <span>할일</span>
+              <div class="btns">
+                <button class="btn delete">삭제</button>
+                <button class="btn change">수정</button>
+                <button class="btn save">저장</button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </main>
+      <footer class="footer" id="footer"></footer>
+    </div>
+  </body>
+  <script src="/common/common.js"></script>
+</html>
