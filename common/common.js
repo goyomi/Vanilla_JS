@@ -3,7 +3,10 @@ document.addEventListener("DOMContentLoaded", function () {
   fetch('/common/header.html')
     .then(response => response.text())
     .then(data => {
-      document.getElementById('header').innerHTML = data;
+      let headerElement = document.getElementById('header');
+      if (headerElement) {
+        headerElement.insertAdjacentHTML("beforeend", data);
+      }
     });
 });
 
@@ -12,7 +15,10 @@ document.addEventListener("DOMContentLoaded", function () {
   fetch('/common/footer.html')
     .then(response => response.text())
     .then(data => {
-      document.getElementById('footer').innerHTML = data;
+      let footerElement = document.getElementById('footer');
+      if (footerElement) {
+        footerElement.insertAdjacentHTML("beforeend", data);
+      }
     });
 });
 
