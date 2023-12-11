@@ -69,6 +69,7 @@
       .outp_field .todo_contents_list li {
         display: flex;
         justify-content: space-between;
+        margin-bottom: 0.6rem;
         padding: 0.8rem;
         background-color: #fff;
         font-size: 1rem;
@@ -96,7 +97,7 @@
       .btns .btn.change {
         background-position: -15.25px -1.5px;
       }
-      .btns .btn.save {
+      .btns .btn.done {
         background-position: -29px -1.5px;
       }
     </style>
@@ -107,24 +108,27 @@
       <main class="main">
         <h2 class="title">My To do List</h2>
         <div class="inp_field">
-          <input type="text" placeholder="할일을 입력해 주세요." /><button>
-            Save
-          </button>
+          <input
+            id="todoText"
+            type="text"
+            placeholder="할일을 입력해 주세요."
+            onkeyup="inputEnter(event)"
+          /><button onclick="doSave()">Save</button>
         </div>
         <div class="outp_field">
           <div class="todo_status_wrap">
-            <span>Todo Done:</span>
-            <span>Todo Progress:</span>
+            <span id="todoDone">Todo Done:</span>
+            <span id="todoProgress">Todo Progress:</span>
           </div>
-          <ul class="todo_contents_list">
-            <li>
+          <ul id="todoContentsList" class="todo_contents_list">
+            <!-- <li>
               <span>할일</span>
               <div class="btns">
                 <button class="btn delete">삭제</button>
                 <button class="btn change">수정</button>
-                <button class="btn save">저장</button>
+                <button class="btn done">완료</button>
               </div>
-            </li>
+            </li> -->
           </ul>
         </div>
       </main>
@@ -132,4 +136,152 @@
     </div>
   </body>
   <script src="/common/common.js"></script>
+  <script>
+    function doSave() {
+      const todoText = document.querySelector("#todoText").value;
+      const todoList = document.querySelector("#todoContentsList");
+      if (todoText !== "") {
+        const newList = `<li class="new_list">
+            <span>${todoText}</span>
+            <div class="btns">
+                <button class="btn delete">삭제</button>
+                <button class="btn change">수정</button>
+                <button class="btn done">완료</button>
+            </div>
+          </li>`;
+
+        todoList.innerHTML += newList;
+        document.querySelector("#todoText").value = "";
+        saveTodos();
+        todoProgress();
+      }
+    }
+
+    function inputEnter() {
+      if (event.keyCode === 13) {
+        if (event.target.classList.contains("inp_edit")) {
+          const listItem = event.target.closest("li");
+          const newText = event.target.value;
+          listItem.querySelector("span").textContent = newText;
+
+          const btnSave = listItem.querySelector(".btn.save");
+          btnSave.classList.remove("save");
+          btnSave.textContent = "수정";
+
+          saveTodos();
+          todoProgress();
+        } else {
+          doSave();
+        }
+      }
+    }
+
+    let numOfDone = 0;
+
+    document
+      .querySelector("#todoContentsList")
+      .addEventListener("click", function () {
+        if (event.target.classList.contains("delete")) {
+          // document.querySelector(".new_list").remove();
+          event.target.closest("li").remove();
+          saveTodos();
+          todoProgress();
+        } else if (event.target.classList.contains("change")) {
+          const listItem = event.target.closest("li");
+          const textSpan = listItem.querySelector("span");
+          const btnChange = listItem.querySelector(".btn.change");
+
+          if (!btnChange.classList.contains("save")) {
+            const currentText = textSpan.textContent;
+            const inpField = `<input type="text" class="inp_edit" onkeyup="inputEnter(event)" value="${currentText}">`;
+            textSpan.innerHTML = inpField;
+
+            btnChange.classList.add("save");
+            btnChange.textContent = "저장";
+          } else if (event.target.classList.contains("save")) {
+            const listItem = event.target.closest("li");
+            const inpField = listItem.querySelector(".inp_edit");
+            const newText = inpField.value;
+
+            listItem.querySelector("span").textContent = newText;
+
+            const btnSave = listItem.querySelector(".btn.save");
+            btnSave.classList.remove("save");
+            btnSave.textContent = "수정";
+
+            saveTodos();
+            todoProgress();
+          }
+        } else if (event.target.classList.contains("done")) {
+          const listItem = event.target.closest("li");
+          const btnDone = listItem.querySelector(".btn.done");
+
+          if (!btnDone.classList.contains("checked")) {
+            btnDone.classList.add("checked");
+            btnDone.textContent = "완료";
+
+            event.target.closest("li").remove();
+            numOfDone++;
+            todoDone(numOfDone);
+            saveTodos();
+          } else {
+            btnDone.classList.remove("checked");
+            btnDone.textContent = "";
+          }
+        }
+      });
+
+    // Local Storage에 저장
+    function saveTodos() {
+      const todos = document.querySelectorAll(
+        "#todoContentsList .new_list span"
+      );
+      const todosData = [];
+
+      todos.forEach((todo) => {
+        todosData.push(todo.textContent);
+      });
+
+      localStorage.setItem("todos", JSON.stringify(todosData));
+    }
+
+    // Local Storage 저장 데이터 화면에 보여주기
+    document.addEventListener("DOMContentLoaded", function () {
+      const todos = JSON.parse(localStorage.getItem("todos"));
+      const todoList = document.querySelector("#todoContentsList");
+
+      todos.forEach((todo) => {
+        let newList = `<li class="new_list">
+            <span>${todo}</span>
+            <div class="btns">
+                <button class="btn delete">삭제</button>
+                <button class="btn change">수정</button>
+                <button class="btn done">완료</button>
+            </div>
+          </li>`;
+        todoList.innerHTML += newList;
+      });
+
+      todoProgress();
+      todoDone(numOfDone);
+    });
+
+    function todoProgress() {
+      const countProgress = document.querySelector("#todoProgress");
+      const todos = JSON.parse(localStorage.getItem("todos"));
+      const listLength = todos.length;
+      const spanValue = `Todo Progress: ${listLength}`;
+
+      countProgress.textContent = spanValue;
+    }
+
+    function todoDone(numOfDone) {
+      const countDone = document.querySelector("#todoDone");
+      const spanValue = `Todo Done: ${numOfDone}`;
+
+      countDone.textContent = spanValue;
+
+      todoProgress();
+    }
+  </script>
 </html>
