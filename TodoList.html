@@ -8,6 +8,7 @@
     <style>
       :root {
         --green-btn-color: #03ae85;
+        --dark--navy-color: #011c2c;
       }
       * {
         box-sizing: border-box;
@@ -21,12 +22,12 @@
         margin: 12rem 0;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        /* justify-content: center; */
         align-items: center;
         gap: 2rem;
       }
       .main .title {
-        font-size: 2rem;
+        font-size: 3rem;
         font-weight: 900;
       }
       .inp_field {
@@ -34,18 +35,18 @@
       }
       .inp_field > input {
         width: 29.3rem;
-        padding: 0.8rem 1rem;
-        font-size: 1rem;
+        padding: 1rem 1rem;
         border: none;
         border-radius: 0.5rem 0 0 0.5rem;
         box-shadow: 0 0.3rem 1rem rgb(29, 31, 36, 0.4);
+        background-color: var(--dark--navy-color);
+        color: var(--light-color);
       }
       .inp_field > button {
         width: 5rem;
-        padding: 0.8rem 1.45rem;
+        padding: 1rem 0.45rem;
         background-color: var(--green-btn-color);
-        font-size: 1rem;
-        color: #fff;
+        color: var(--light-color);
         border-radius: 0 0.5rem 0.5rem 0;
         box-shadow: 0.4rem 0.3rem 1rem rgb(29, 31, 36, 0.4);
         cursor: pointer;
@@ -54,7 +55,7 @@
         min-width: 34.3rem;
         display: flex;
         flex-direction: column;
-        gap: 0.6rem;
+        gap: 1rem;
       }
       .outp_field .todo_status_wrap {
         display: flex;
@@ -66,13 +67,24 @@
         padding: 0.5rem 0.8rem;
         border: 0.1rem solid #d9d9d9;
       }
+      .outp_field .btn.reset {
+        padding: 1rem;
+        background-color: var(--light-gray-color);
+        color: var(--dark-color);
+        border-radius: 0.5rem;
+      }
       .outp_field .todo_contents_list li {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 0.6rem;
-        padding: 0.8rem;
-        background-color: #fff;
-        font-size: 1rem;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        background-color: var(--light-color);
+        border-radius: 0.5rem;
+        border: 0.1rem solid var(--light-gray-color);
+      }
+      .outp_field .todo_contents_list li:hover {
+        font-weight: bold;
+        border: 0.12rem solid var(--dark--navy-color);
       }
       .outp_field .todo_contents_list .btns {
         display: inline-flex;
@@ -81,8 +93,8 @@
         justify-content: center;
       }
       .btns .btn {
-        width: 1.025rem;
-        height: 1rem;
+        width: 2.05rem;
+        height: 2rem;
         background-image: url(./Asset/todo_sprites.png);
         background-size: 400%;
         color: transparent;
@@ -92,13 +104,14 @@
         cursor: pointer;
       }
       .btns .btn.delete {
-        background-position: -1.5px -1.5px;
+        background-position: -3px -3px;
       }
       .btns .btn.change {
-        background-position: -15.25px -1.5px;
+        background-position: -30.5px -3px;
       }
       .btns .btn.done {
-        background-position: -29px -1.5px;
+        /* background-position: -58px -3px; */
+        background-position: -57px -3.5px;
       }
     </style>
   </head>
@@ -120,6 +133,7 @@
             <span id="todoDone">Todo Done:</span>
             <span id="todoProgress">Todo Progress:</span>
           </div>
+          <button id="reset" class="btn reset" disabled>All Reset</button>
           <ul id="todoContentsList" class="todo_contents_list">
             <!-- <li>
               <span>할일</span>
@@ -216,6 +230,8 @@
           const listItem = event.target.closest("li");
           const btnDone = listItem.querySelector(".btn.done");
 
+          saveTodos();
+          todoProgress();
           if (!btnDone.classList.contains("checked")) {
             btnDone.classList.add("checked");
             btnDone.textContent = "완료";
@@ -243,6 +259,7 @@
       });
 
       localStorage.setItem("todos", JSON.stringify(todosData));
+      todoReset();
     }
 
     // Local Storage 저장 데이터 화면에 보여주기
@@ -262,17 +279,24 @@
         todoList.innerHTML += newList;
       });
 
+      const SaveTodoDone = parseInt(localStorage.getItem("todoDone")) || 0;
+      numOfDone = SaveTodoDone;
+
       todoProgress();
       todoDone(numOfDone);
+      todoReset();
     });
 
     function todoProgress() {
       const countProgress = document.querySelector("#todoProgress");
-      const todos = JSON.parse(localStorage.getItem("todos"));
-      const listLength = todos.length;
+      const todosInDom = document.querySelectorAll(
+        "#todoContentsList .new_list"
+      );
+      const listLength = todosInDom.length;
       const spanValue = `Todo Progress: ${listLength}`;
 
       countProgress.textContent = spanValue;
+      return listLength;
     }
 
     function todoDone(numOfDone) {
@@ -280,8 +304,38 @@
       const spanValue = `Todo Done: ${numOfDone}`;
 
       countDone.textContent = spanValue;
-
-      todoProgress();
+      localStorage.setItem("todoDone", numOfDone.toString());
     }
+
+    function todoReset() {
+      const btnReset = document.querySelector("#reset");
+      const currentTodoProgress = todoProgress();
+
+      if (currentTodoProgress > 0 || numOfDone > 0) {
+        btnReset.style.backgroundColor = "var(--dot-color)";
+        btnReset.style.cursor = "pointer";
+        btnReset.style.color = "var(--light-color)";
+        btnReset.disabled = false;
+      } else {
+        btnReset.style.backgroundColor = "var(--light-gray-color)";
+        btnReset.style.cursor = "not-allowed";
+        btnReset.style.color = "var(--dark-color)";
+        btnReset.disabled = true;
+      }
+    }
+
+    document.querySelector("#reset").addEventListener("click", function () {
+      const allListItem = document.querySelectorAll(".new_list");
+
+      allListItem.forEach((listItem) => {
+        listItem.remove();
+      });
+
+      numOfDone = 0;
+
+      saveTodos();
+      todoProgress();
+      todoDone(numOfDone);
+    });
   </script>
 </html>
