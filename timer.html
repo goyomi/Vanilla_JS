@@ -15,8 +15,12 @@
       body {
         color: var(--light-color);
       }
+      .main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
       .main .inner {
-        margin-top: 11.3rem;
         max-width: 34.48rem;
         padding: 1.44rem 1.92rem 4.8rem 1.68rem;
         background-color: var(--dark-navy-color);
@@ -75,11 +79,11 @@
           <h2>Timer</h2>
           <div class="time_values">
             <div class="value hours">
-              <div class="dial">00</div>
+              <div class="h dial">00</div>
               <span>Hours</span>
             </div>
             <div class="value minutes">
-              <div class="dial">00</div>
+              <div class="min dial">00</div>
               <span>Minutes</span>
             </div>
             <div class="value seconds">
@@ -97,5 +101,79 @@
       <footer class="footer" id="footer"></footer>
     </div>
     <script src="/common/common.js"></script>
+    <script>
+      let second = 0;
+      let minute = 0;
+      let hour = 0;
+      let timerId = null;
+      let isTimerRunning = false;
+      // true: 타이머가 현재 실행 중임
+      // false: 타이머가 실행 중이지 않음
+      let isTimerPaused = false;
+      // true: 타이머가 일시 정지된 상태
+      // false: 타이머가 일시 정지되지 않음
+      const secDial = document.querySelector(".sec.dial");
+      const minDial = document.querySelector(".min.dial");
+      const hDial = document.querySelector(".h.dial");
+
+      function timer() {
+        if (!isTimerRunning || isTimerPaused) {
+          isTimerRunning = true;
+          isTimerPaused = false;
+          timerId = setInterval(() => {
+            second++;
+
+            if (second > 59) {
+              minute++;
+              second = 0;
+            } else if (minute > 59) {
+              hour++;
+              minute = 0;
+            } else if (hour > 23) {
+              hour = 0;
+            }
+
+            secDial.innerText = second.toString().padStart(2, "0");
+            minDial.innerText = minute.toString().padStart(2, "0");
+            hDial.innerText = hour.toString().padStart(2, "0");
+          }, 1);
+        }
+      }
+
+      function pauseTimer() {
+        if (isTimerRunning && !isTimerPaused) {
+          clearInterval(timerId);
+          isTimerRunning = false;
+          isTimerPaused = true;
+          timerId = null;
+        }
+      }
+
+      function resetTimer() {
+        clearInterval(timerId);
+        isTimerRunning = false;
+        isTimerPaused = false;
+        timerId = null;
+
+        secDial.innerText = "00";
+        minDial.innerText = "00";
+        hDial.innerText = "00";
+        second = 0;
+        minute = 0;
+        hour = 0;
+      }
+
+      document.addEventListener("click", function (event) {
+        if (event.target.classList.contains("btn")) {
+          if (event.target.id.includes("start")) {
+            timer();
+          } else if (event.target.id.includes("pause")) {
+            pauseTimer();
+          } else if (event.target.id.includes("reset")) {
+            resetTimer();
+          }
+        }
+      });
+    </script>
   </body>
 </html>
