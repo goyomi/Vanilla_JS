@@ -1,6 +1,6 @@
 // 헤더
 document.addEventListener("DOMContentLoaded", function () {
-  fetch('header.html')
+  fetch('common/header.html')
     .then(response => response.text())
     .then(data => {
       let headerElement = document.getElementById('header');
@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // 푸터
 document.addEventListener("DOMContentLoaded", function () {
-  fetch('footer.html')
+  fetch('common/footer.html')
     .then(response => response.text())
     .then(data => {
       let footerElement = document.getElementById('footer');
